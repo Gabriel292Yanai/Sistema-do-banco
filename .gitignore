@@ -1,24 +1,85 @@
-# Compiled class file
-*.class
+import java.util.Scanner;
 
-# Log file
-*.log
+public class GerenciaBanco {
+    private String nome;
+    private String sobrenome;
+    private String cpf;
+    private double saldo;
 
-# BlueJ files
-*.ctxt
+    public GerenciaBanco(String nome, String sobrenome, String cpf) {  //onde será armazenados as variaveis 
+        this.nome = nome;
+        this.sobrenome = sobrenome;
+        this.cpf = cpf;
+        this.saldo = 0.0; 
+    }
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+    // Mostra o procedimento que é deposito
+    public void depositar(double valor) {   
+        if (valor > 0) {    // o valor so vai ser gerado caso valor seja maior que 0
+            saldo += valor;    // se o valor for maior que 0 então esse codigo será executado 
+            System.out.printf("Depósito de R$%.2f realizado com sucesso!\n", valor);
+        } else {
+            System.out.println("Valor de depósito inválido."); // caso não seja maior que 0, então ele vai aparecer essa mensagem
+        }
+    }
 
-# Package Files #
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
+    public void sacar(double valor) {
+        if (valor > 0 && valor <= saldo) {    // aqui será feito se o valor que deseja sacar for maior que 0 e também precisa ser menor que o saldo
+            saldo -= valor;     // caso cumpra os requisitos então o codígo será executado
+            System.out.printf("Saque de R$%.2f realizado com sucesso!\n", valor);
+        } else {
+            System.out.println("Saque inválido. Verifique o saldo."); // caso não cumpra qualquer um dos requisitos aparecera essa mensagem
+        }
+    }
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-replay_pid*
+    public void consultarSaldo() {
+        System.out.printf("Seu saldo atual é: R$%.2f\n", saldo);  // aqui mostra o valor do saldo
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);   // onde scanner vai fazer o usuario possa interagir com o programa
+        System.out.println("Bem-vindo ao Banco!");
+        System.out.print("Digite seu nome: ");
+        String nome = scanner.nextLine();  // o usuario vai poder interagir
+        System.out.print("Digite seu sobrenome: ");
+        String sobrenome = scanner.nextLine();
+        System.out.print("Digite seu CPF: ");
+        String cpf = scanner.nextLine();
+
+        GerenciaBanco conta = new GerenciaBanco(nome, sobrenome, cpf);  // classe criado vai se tornar um objeto
+
+        int opcao; 
+        do {    // onde construi uma estrutura de repetição utilizando "do while"
+            System.out.println("\nMenu:");
+            System.out.println("1 - Depositar");
+            System.out.println("2 - Sacar");
+            System.out.println("3 - Consultar Saldo");
+            System.out.println("0 - Sair");
+            System.out.print("Escolha uma opção: ");
+            opcao = scanner.nextInt();
+
+            switch (opcao) {  // estrutura de decisão que coloquei a variavel opcao
+                case 1:   // caso o usuario escolha o case 1 ele vai pedir para inserir o valor que deseja depositar, assim ira executar o procedimento depositar
+                    System.out.print("Digite o valor a depositar: R$");
+                    double valorDeposito = scanner.nextDouble();
+                    conta.depositar(valorDeposito);
+                    break;
+                case 2:   // caso o usuario escolha o case 2 ele vai pedir para inserir o valor que deseja sacar, assim ira executar o procedimento sacar
+                    System.out.print("Digite o valor a sacar: R$");
+                    double valorSaque = scanner.nextDouble();
+                    conta.sacar(valorSaque);
+                    break;
+                case 3:   // caso o usuario escolha o case 3 ele mostrar o saldo atual da conta, que sera executado o procedimento consultarSaldo
+                    conta.consultarSaldo(); 
+                    break;
+                case 0: // caso o usuario escolha o case 0 ele vai mostrar uma mensagem se despedindo
+                    System.out.println("Saindo do sistema. Obrigado, " + nome + " " + sobrenome + "!");
+                    break;
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
+            }
+        } while (opcao != 0);    // o looping só sera encerrado se o usuario escolha o número 0
+
+        scanner.close();   // aqui será encerrado o Scanner
+    }
+}
